@@ -22,4 +22,10 @@
     outline: 3px solid var(--couleur-accent-sombre);
     outline-offset: 3px;
   }
+  /* Évite un cadre de focus visuel sur les titres et repères recevant un focus programmatique. */
+  h1[tabindex="-1"]:focus,
+  main[tabindex="-1"]:focus,
+  section[tabindex="-1"]:focus {
+    outline: none;
+  }
 }
