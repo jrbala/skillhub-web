@@ -38,7 +38,7 @@ export default function Layout() {
     catch (cause) { definirMessage(cause instanceof Error ? cause.message : 'Déconnexion impossible.') }
   }
   const compteClasse = 'flex-1 overflow-hidden text-ellipsis whitespace-nowrap !px-2 !py-2 !text-[0.8125rem] font-bold md:flex-none md:!px-4 md:!py-[0.65rem] md:!text-[0.9375rem]'
-  const lienClasse = 'border-b-[3px] border-transparent pb-1 text-texte no-underline hover:border-accent hover:text-accent focus-visible:border-accent'
+  const lienClasse = 'inline-flex items-center border-y-[3px] border-transparent py-1 text-texte no-underline hover:border-b-accent hover:text-accent focus-visible:border-b-accent'
   return <div className={authentification ? 'flex min-h-screen flex-col' : ''}>
     <a href="#contenu" className="absolute -top-12 left-0 z-50 bg-surface px-4 py-2 focus:top-0">Aller au contenu principal</a>
     <header className="grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-3 border-b border-bordure bg-surface px-6 py-3 md:flex md:flex-wrap">
