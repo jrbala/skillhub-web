@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { champ, secondaire, section } from '../components/styles'
+import { champ, etiquetteChamp, secondaire, section } from '../components/styles'
 import RechercheAteliers from '../components/RechercheAteliers'
 import CarteAtelier from '../components/CarteAtelier'
 import TitreDeVue from '../components/TitreDeVue'
@@ -180,7 +180,7 @@ export default function Catalogue({ accueil = false }: { accueil?: boolean }) {
         const nombre = etatAffichage.donnees.length
         return (
           <>
-            <p role="status" aria-live="polite">
+            <p role="status" aria-live="polite" className="mt-5 mb-3 text-sm text-[#53576a]">
               {nombre} atelier{nombre !== 1 ? 's' : ''} trouvé{nombre !== 1 ? 's' : ''}.
             </p>
             <div className="relative flex items-center">
@@ -252,36 +252,41 @@ export default function Catalogue({ accueil = false }: { accueil?: boolean }) {
       <form
         role="search"
         aria-label="Filtrer les ateliers"
-        className="mx-auto flex w-full max-w-[42rem] flex-wrap items-end gap-4 border-l-4 border-accent bg-[rgba(221,224,235,0.231)] p-6"
+        className="grid w-full grid-cols-2 items-end gap-4 rounded-carte border border-bordure bg-surface p-4 shadow-carte md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] md:p-5"
         onSubmit={e => e.preventDefault()}
         onReset={e => {
           e.preventDefault()
           reinitialiser()
+          e.currentTarget.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
         }}
       >
         <RechercheAteliers ateliers={ateliers} recherche={recherche} modifier={valeur => mettreAJourFiltre('q', valeur)} />
-        <div className="mb-4 flex-[1_1_12rem]">
-          <label htmlFor="niveau" className="mb-2 block font-bold">Niveau</label>
+        <div className="min-w-0">
+          <label htmlFor="niveau" className={etiquetteChamp}>Niveau</label>
           <select id="niveau" value={niveau} onChange={e => mettreAJourFiltre('niveau', e.target.value)} className={champ}>
-            <option value="">Tous les niveaux</option>
+            <option value="">Sans filtre</option>
             {NIVEAUX_VALIDES.map(n => <option key={n}>{n}</option>)}
           </select>
         </div>
-        <div className="mb-4 flex-[1_1_12rem]">
-          <label htmlFor="tri" className="mb-2 block font-bold">Trier par prix</label>
+        <div className="min-w-0">
+          <label htmlFor="tri" className={etiquetteChamp}>Trier par prix</label>
           <select id="tri" value={tri} onChange={e => mettreAJourFiltre('tri', e.target.value)} className={champ}>
-            <option value="">Ordre du catalogue</option>
+            <option value="">Par défaut</option>
             <option value="croissant">Prix croissant</option>
             <option value="decroissant">Prix décroissant</option>
           </select>
         </div>
-        {!accueil && (
-          <label className="mb-2 flex items-center gap-3 font-bold">
-            <input type="checkbox" checked={disponible} onChange={e => mettreAJourFiltre('disponible', e.target.checked)} />
-            Places disponibles uniquement
-          </label>
+        {(!accueil || aFiltresActifs) && (
+          <div className="col-span-full flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-bordure pt-3 text-sm">
+            {!accueil && (
+              <label className="flex min-h-9 items-center gap-2 font-bold">
+                <input type="checkbox" checked={disponible} onChange={e => mettreAJourFiltre('disponible', e.target.checked)} className="size-4 accent-accent" />
+                Places disponibles uniquement
+              </label>
+            )}
+            {aFiltresActifs && <button type="reset" className="ml-auto min-h-9 cursor-pointer text-accent-sombre underline underline-offset-4">Réinitialiser les filtres</button>}
+          </div>
         )}
-        <button type="reset" className={`${secondaire} mx-auto block`}>Réinitialiser les filtres</button>
       </form>
       {!accueil && <h2 className="sr-only">Liste des ateliers</h2>}
       {rendreContenuCatalogue()}

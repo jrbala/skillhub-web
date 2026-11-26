@@ -1,12 +1,13 @@
-// Chargement et validation du catalogue via l'API configurée par VITE_API_URL (json-server par défaut).
+// Chargement et validation du catalogue via l'API configurée par VITE_API_URL
+// (json-server en développement local, JSON statique sur le même domaine en production).
 import type { AtelierCatalogue } from '../types';
 
 export const CLE_ATELIERS_CREES = 'skillhub_ateliers_crees';
-const URL_API_DEFAUT = 'http://localhost:3001';
+const URL_API_DEFAUT = import.meta.env.PROD ? '/api/ateliers.json' : 'http://localhost:3001';
 
 export function construireUrlAteliers(baseApi: string | undefined = import.meta.env.VITE_API_URL): string {
   const base = (baseApi?.trim() || URL_API_DEFAUT).replace(/\/+$/, '');
-  return base.endsWith('/ateliers') ? base : `${base}/ateliers`;
+  return base.endsWith('/ateliers') || base.endsWith('.json') ? base : `${base}/ateliers`;
 }
 
 function estAtelier(valeur: unknown): valeur is AtelierCatalogue {

@@ -1,5 +1,8 @@
-import { section, champ, bouton } from './styles'
+import { section, champ, etiquetteChamp, bouton } from './styles'
 import { useRef, useState, type FormEvent } from 'react'
+
+const erreurChamp = 'mt-2 mb-0 text-sm text-erreur empty:hidden'
+
 export default function Contact() {
   const [message, definirMessage] = useState('')
   const [erreurs, definirErreurs] = useState<Record<string, string>>({})
@@ -13,19 +16,28 @@ export default function Contact() {
     definirMessage('Votre demande de démonstration a été validée. Aucune donnée n’a été envoyée ni inscription à un atelier effectuée.')
     statut.current?.focus()
   }
-  const classeChamp = champ
   return <section id="inscription" className={section}>
-    <h2 className="text-center">Découvrir SkillHub</h2>
-    <p className="mx-auto text-center">Essayez le formulaire de contact de démonstration. Pour réserver un atelier, utilisez son bouton « S’inscrire ».</p>
-    <form noValidate onSubmit={envoyer} className="mx-auto w-full max-w-[42rem] border-l-4 border-accent bg-[rgba(221,224,235,0.231)] p-6">
-      {[{ nom: 'nom', label: 'Nom', type: 'text' }, { nom: 'email', label: 'Adresse e-mail', type: 'email' }].map(c => <div key={c.nom} className="mb-4">
-        <label className="mb-2 block font-bold" htmlFor={`contact-${c.nom}`}>{c.label}</label>
-        <input id={`contact-${c.nom}`} required name={c.nom} type={c.type} autoComplete={c.nom === 'nom' ? 'name' : 'email'} aria-invalid={Boolean(erreurs[c.nom])} aria-describedby={`contact-erreur-${c.nom}`} className={classeChamp} />
-        <p id={`contact-erreur-${c.nom}`} className="mt-2 mb-0 min-h-[1.5em] text-[0.875rem] text-erreur">{erreurs[c.nom]}</p>
-      </div>)}
-      <div className="mb-4"><label className="mb-2 block font-bold" htmlFor="contact-message">Message</label><textarea rows={4} id="contact-message" required name="message" aria-invalid={Boolean(erreurs.message)} aria-describedby="contact-erreur-message" className={classeChamp} /><p id="contact-erreur-message" className="mt-2 mb-0 min-h-[1.5em] text-[0.875rem] text-erreur">{erreurs.message}</p></div>
-      <button className={`${bouton} mx-auto !block`}>Envoyer ma demande</button>
-      <p ref={statut} tabIndex={-1} role="status" className="text-center font-bold text-accent-sombre">{message}</p>
-    </form>
+    <div className="grid gap-6 border-t border-bordure pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.65fr)] md:gap-10 md:pt-10">
+      <div>
+        <h2 id="titre-contact" className="m-0 text-3xl leading-tight tracking-tight">Contactez SkillHub</h2>
+        <p className="mt-3 mb-0 text-[#53576a]">Vous pouvez essayer ce formulaire de démonstration. Pour réserver un atelier, utilisez le bouton « S’inscrire » sur sa fiche.</p>
+      </div>
+      <form noValidate onSubmit={envoyer} aria-labelledby="titre-contact" className="grid gap-5 rounded-carte border border-bordure bg-surface p-5 shadow-carte md:grid-cols-2 md:p-7">
+        {[{ nom: 'nom', label: 'Nom', type: 'text', autocomplete: 'name' }, { nom: 'email', label: 'Adresse e-mail', type: 'email', autocomplete: 'email' }].map(c => <div key={c.nom} className="min-w-0">
+          <label className={etiquetteChamp} htmlFor={`contact-${c.nom}`}>{c.label}</label>
+          <input id={`contact-${c.nom}`} required name={c.nom} type={c.type} autoComplete={c.autocomplete} aria-invalid={Boolean(erreurs[c.nom])} aria-describedby={`contact-erreur-${c.nom}`} className={champ} />
+          <p id={`contact-erreur-${c.nom}`} className={erreurChamp}>{erreurs[c.nom]}</p>
+        </div>)}
+        <div className="col-span-full">
+          <label className={etiquetteChamp} htmlFor="contact-message">Message</label>
+          <textarea rows={4} id="contact-message" required name="message" aria-invalid={Boolean(erreurs.message)} aria-describedby="contact-erreur-message" className={`${champ} block resize-y`} />
+          <p id="contact-erreur-message" className={erreurChamp}>{erreurs.message}</p>
+        </div>
+        <div className="col-span-full">
+          <button type="submit" className={`${bouton} font-bold`}>Envoyer ma demande</button>
+          <p ref={statut} tabIndex={-1} role="status" className="m-0 rounded-lg text-sm font-bold text-accent-sombre not-empty:mt-4 not-empty:bg-lavande not-empty:p-3">{message}</p>
+        </div>
+      </form>
+    </div>
   </section>
 }

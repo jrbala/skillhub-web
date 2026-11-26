@@ -23,7 +23,7 @@ await run(`document.querySelector('#motDePasse').value=''`);await fill('#motDePa
 await click('dialog[open] button[aria-label^="Déjà inscrit"]');assert.equal(await run(`JSON.parse(localStorage.skillhub_inscriptions).length`),1);
 await go('/profil');await ok(`document.body.textContent.includes('Découvrir le HTML')`,'persistance profil');await click('li button');await ok(`document.querySelector('dialog').open`,'confirmation annulation');await click('dialog button');assert.equal(await run(`JSON.parse(localStorage.skillhub_inscriptions).length`),1);await click('li button');await click('dialog button:last-child');await ok(`JSON.parse(localStorage.skillhub_inscriptions).length===0`,'annulation');
 await go('/ateliers/react');await ok(`document.querySelector('aside button').getAttribute('aria-disabled')==='true'`,'complet');
-await click('header > div button');await go('/profil');await ok(`location.pathname==='/connexion'`,'profil protege');
+await click('#navigation button');await go('/profil');await ok(`location.pathname==='/connexion'`,'profil protege');
 for(const p of ['/','/ateliers','/ateliers/html','/connexion','/inscription','/absent','/cours-html.html']){await go(p);await ok(`Boolean(document.querySelector('h1'))`,'route '+p)}
 for(const width of [375,800,1280]){await call('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});await go('/');await ok(`document.documentElement.scrollWidth<=innerWidth`,'responsive '+width);assert(await run(`Array.from(document.images).filter(i=>i.loading!=='lazy').every(i=>i.complete&&i.naturalWidth>0)`));}
 // Régression : deux inscriptions ne doivent pas élargir la page mobile.

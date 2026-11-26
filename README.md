@@ -42,10 +42,14 @@ L’application met l’accent sur une architecture front-end claire (séparatio
 
 ```text
 skillhub-web/
-├── db.json                        # Catalogue de 12 ateliers servi par json-server
-├── .env.example                   # Exemple de configuration (VITE_API_URL)
+├── db.json                        # Catalogue de 12 ateliers servi par json-server en local
+├── .env.example                   # Exemple de configuration locale (VITE_API_URL)
+├── .env.production                # URL de l’API statique en production (/api/ateliers.json)
+├── vercel.json                    # Configuration Vercel (JSON statique + fallback SPA)
 ├── index.html
 ├── public/
+│   ├── api/
+│   │   └── ateliers.json          # Catalogue statique des 12 ateliers pour la production
 │   ├── favicon.svg
 │   └── robots.txt
 ├── src/
@@ -123,7 +127,7 @@ L’application est ensuite accessible à l’adresse indiquée par Vite (par d�
 | `npm run dev` | Démarre le serveur de développement Vite |
 | `npm run lint` | Lance la vérification ESLint sur le projet |
 | `npm run build` | Vérifie le typage TypeScript (`tsc -b`) et génère le build de production dans `dist/` |
-| `npm run preview` | Sert localement le build de production (avec `npm run api` actif en parallèle) |
+| `npm run preview` | Sert localement le build de production (utilise le JSON statique `/api/ateliers.json` sur le même domaine) |
 
 ### Tester les rôles en local
 
@@ -138,7 +142,7 @@ Le dossier `tests/` contient deux scripts Node.js utilisant le protocole Chrome 
 
 ## Limites connues et périmètre
 
-- **Dépendance à une API locale** : le catalogue d’ateliers est chargé depuis `VITE_API_URL/ateliers` (`json-server` + `db.json` en local). Si `npm run api` n’est pas démarré, l’interface affiche un état d’erreur avec un bouton *Réessayer*.
+- **Catalogue statique en production / API locale en développement** : en développement local (`npm run dev`), le catalogue est chargé depuis `http://localhost:3001/ateliers` (`json-server` + `db.json`). En production (`npm run build` / Vercel), le catalogue est servi depuis le même domaine via le fichier statique `/api/ateliers.json` (`.env.production` + `vercel.json`).
 - **Stockage de démonstration côté navigateur** : les comptes utilisateurs (mot de passe haché en SHA-256 via `crypto.subtle`), la session active, les inscriptions et les ateliers créés par un formateur sont enregistrés uniquement dans `localStorage` (`skillhub_utilisateurs`, `skillhub_session`, `skillhub_inscriptions`, `skillhub_ateliers_crees`). Il ne s’agit pas d’une authentification ni d’une persistance serveur de production — utilisez uniquement des données fictives.
 - **Formulaire de contact et réservations** : le formulaire de contact de la page d’accueil valide les champs côté client sans envoyer d’e-mail, et les réservations d’ateliers n’impliquent aucun paiement réel.
-- **Pas de démonstration en ligne** : ce dépôt contient uniquement l’application front-end et son jeu de données local ; aucun hébergement en ligne ni backend distant n’est configuré.
+- **Déploiement statique Vercel** : le fichier `vercel.json` configure la publication front-end (build Vite dans `dist/`, JSON statique sous `/api/ateliers.json` et `/api/ateliers`, et réécriture des routes React Router vers `/index.html`).

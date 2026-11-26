@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AtelierCatalogue } from '../types'
-import { champ } from './styles'
+import { champ, etiquetteChamp } from './styles'
 function normaliser(texte: string) { return texte.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr').trim() }
 export default function RechercheAteliers({ ateliers, recherche, modifier }: { ateliers: AtelierCatalogue[]; recherche: string; modifier: (valeur: string) => void }) {
   const [ouvert, definirOuvert] = useState(false)
@@ -8,9 +8,9 @@ export default function RechercheAteliers({ ateliers, recherche, modifier }: { a
   const suggestions = recherche.trim() ? ateliers.filter(a => normaliser(a.nom).includes(normaliser(recherche))).slice(0, 6) : []
   const visible = ouvert && suggestions.length > 0
   function choisir(nom: string) { modifier(nom); definirOuvert(false); definirActif(-1) }
-  return <div className="relative mb-4 min-w-0 flex-[1_1_12rem]" onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) definirOuvert(false) }}>
-    <label htmlFor="recherche" className="mb-2 block font-bold">Rechercher un atelier ou un formateur</label>
-    <input id="recherche" type="search" autoComplete="off" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls="suggestions" aria-activedescendant={visible && actif >= 0 && actif < suggestions.length ? `suggestion-${suggestions[actif].id}` : undefined} value={recherche} onFocus={() => definirOuvert(true)} onChange={e => { modifier(e.target.value); definirActif(-1); definirOuvert(true) }} className={champ} onKeyDown={e => {
+  return <div className="relative col-span-2 min-w-0 md:col-span-1" onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) definirOuvert(false) }}>
+    <label htmlFor="recherche" className={etiquetteChamp}>Rechercher un atelier ou un formateur</label>
+    <input id="recherche" type="search" placeholder="Ex. JavaScript" autoComplete="off" role="combobox" aria-autocomplete="list" aria-expanded={visible} aria-controls="suggestions" aria-activedescendant={visible && actif >= 0 && actif < suggestions.length ? `suggestion-${suggestions[actif].id}` : undefined} value={recherche} onFocus={() => definirOuvert(true)} onChange={e => { modifier(e.target.value); definirActif(-1); definirOuvert(true) }} className={champ} onKeyDown={e => {
       if (e.key === 'Escape') { definirOuvert(false); definirActif(-1) }
       if (suggestions.length && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
         e.preventDefault(); definirOuvert(true); definirActif(index => (index + (e.key === 'ArrowDown' ? 1 : -1) + suggestions.length) % suggestions.length)

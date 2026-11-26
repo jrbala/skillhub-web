@@ -1,4 +1,5 @@
-import { section } from '../components/styles'
+import { Link } from 'react-router-dom'
+import { bouton, section } from '../components/styles'
 import { iconesValeurs } from '../assets/iconesValeurs'
 import ReservationAccueil from '../components/ReservationAccueil'
 import TitreDeVue from '../components/TitreDeVue'
@@ -20,16 +21,19 @@ const valeurs = [['Partage des connaissances', 'Partagez vos connaissances et ap
 const formateurs = [{ nom: 'Fernanda Maria', domaine: 'HTML & CSS', texte: 'Donnez forme à vos premières pages web.', image: fernanda, srcSet: `${fernandaPetit} 320w, ${fernanda} 640w, ${fernandaGrand} 960w` }, { nom: 'Joseph Ricardo', domaine: 'JavaScript', texte: 'Passez des pages statiques aux interactions.', image: joseph, srcSet: `${josephPetit} 320w, ${joseph} 640w, ${josephGrand} 960w` }, { nom: 'Dominique Laurent', domaine: 'Accessibilité web', texte: 'Pensez des interfaces accessibles à tous.', image: dominique, srcSet: `${dominiquePetit} 320w, ${dominique} 640w, ${dominiqueGrand} 960w` }]
 export default function Accueil() {
   return <>
-    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-4">
-      <section id="accroche" className="mx-auto w-full max-w-contenu px-6 py-6">
-        <TitreDeVue titreDocument="Ateliers et partage de compétences">Apprenez et partagez vos compétences</TitreDeVue>
-        <p className="!max-w-none">Développez des compétences concrètes grâce à des ateliers accessibles, animés par des formateurs passionnés. Apprenez à votre rythme, pratiquez en groupe et partagez vos connaissances avec la communauté.</p>
+    <div className="mx-auto grid w-full max-w-contenu gap-8 px-6 pt-9 lg:grid-cols-2 lg:items-center lg:gap-x-12 lg:pt-14">
+      <section id="accroche">
+        <TitreDeVue titreDocument="Ateliers et partage de compétences" className="m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.08] tracking-[-0.045em]">Apprenez le web en pratiquant</TitreDeVue>
+        <p className="mt-4 mb-6 text-[#53576a] lg:text-lg">Des ateliers en groupe pour créer vos premières pages, coder en JavaScript et concevoir des sites accessibles.</p>
+        <Link to="/#ateliers" className={`${bouton} font-bold`}>Explorer les ateliers <span aria-hidden="true">→</span></Link>
       </section>
-      <img src={accroche960} srcSet={`${accroche480} 480w, ${accroche960} 960w, ${accroche1440} 1440w`} sizes="(max-width: 960px) 100vw, 960px" alt="Vue de dessus d'une table où plusieurs personnes travaillent sur des ordinateurs" width="960" height="640" className="row-start-2 aspect-[21/9] w-full object-cover lg:col-span-2" fetchPriority="high" />
-      <aside className="mx-auto mt-12 w-[calc(100%-3rem)] max-w-contenu border border-l-4 border-bordure border-l-accent bg-[rgb(91_76_240/6%)] p-6 lg:col-start-2 lg:row-start-1 lg:mx-0 lg:mt-16 lg:mr-6 lg:w-[calc(100%-1.5rem)] lg:self-start">
-        <h2>Prochain atelier</h2><p>Le prochain atelier est consacré aux bases du HTML.</p><ReservationAccueil />
+      <img src={accroche960} srcSet={`${accroche480} 480w, ${accroche960} 960w, ${accroche1440} 1440w`} sizes="(max-width: 1023px) calc(100vw - 3rem), 502px" alt="Vue de dessus d'une table où plusieurs personnes travaillent sur des ordinateurs" width="960" height="640" className="aspect-[16/9] w-full rounded-carte object-cover lg:aspect-[4/3]" fetchPriority="high" />
+      <aside aria-labelledby="prochain-atelier" className="rounded-carte border border-bordure bg-surface p-5 shadow-carte lg:col-span-2 lg:px-6">
+        <h2 id="prochain-atelier" className="m-0 mb-2 text-sm text-accent-sombre">Prochain atelier</h2>
+        <ReservationAccueil />
       </aside>
     </div>
+    <Catalogue accueil />
     <section id="valeurs" tabIndex={-1} className={section}>
       <h2>Nos valeurs</h2><p>Apprendre ensemble, progresser à son rythme.</p>
       <ul className="mt-7 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-2 lg:grid-cols-3">
@@ -39,7 +43,6 @@ export default function Accueil() {
         </li>)}
       </ul>
     </section>
-    <Catalogue accueil />
     <section id="formateurs" tabIndex={-1} className={section}>
       <h2>Nos formateurs</h2><p>Nos formateurs accompagnent les participants pendant les ateliers.</p>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(16rem,100%),1fr))] gap-4">
