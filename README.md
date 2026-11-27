@@ -1,5 +1,9 @@
 # SkillHub
 
+[Voir la démonstration en ligne](https://skillhub.ademilsonferreira.com) · [Portfolio développeur](https://dev.ademilsonferreira.com)
+
+Projet de formation — développement web full stack, IMIE Paris.
+
 Application web front-end de découverte, recherche, inscription et gestion d’ateliers de compétences, développée avec **React 19**, **TypeScript**, **Vite 8**, **React Router 7** et **Tailwind CSS 4**.
 
 L’application met l’accent sur une architecture front-end claire (séparation vues / composants / contextes / hooks / services), un typage TypeScript strict, une gestion explicite des états asynchrones et l’accessibilité (navigation au clavier, gestion du focus en SPA, modales natives `<dialog>`, annonces `aria-live`, conception responsive mobile-first).
